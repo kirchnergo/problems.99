@@ -13,3 +13,12 @@ See also
 - [[https://lifeisalist.wordpress.com/l-99-in-q/][Q-99]] in Q
 - [[https://wiki.haskell.org/99_questions][H-99]] in Haskell
 - [[http://www.ic.unicamp.br/~meidanis/courses/mc336/2006s2/funcional/L-99_Ninety-Nine_Lisp_Problems.html][L-99]] and [[https://www.informatimago.com/develop/lisp/l99/][L-99-Solutions]]
+
+* Problems
+- [[./1-list/README.org][Lists]]
+- [[./2-arithm/README.org][Arithmetic]]
+- [[./3-logic/README.org][Logic and Codes]]
+- [[./4-bintree/README.org][Binary Trees]]
+- [[./5-tree/README.org][Multiway Trees]]
+- [[./6-graph/README.org][Graphs]]
+- [[./7-misc/README.org][Miscellaneous]]
