@@ -1,0 +1,15 @@
+#+Title: Ninety-Nine Problems in ...
+
+
+Solutions to the [[https://sites.google.com/site/prologsite/prolog-problems][Ninety-Nine Prolog Problems]] in various nice languages: 
+- [[http://jsoftware.com/][J]] 
+- [[http://code.kx.com/qref//][Q]] 
+- [[http://www.wolfram.com/language/][Mathematica]] 
+- [[http://fsharp.org/][F#]] 
+- [[https://clojure.org/][Clojure]]
+
+See also 
+- [[https://sites.google.com/site/prologsite/prolog-problems][P-99]] in Prolog
+- [[https://lifeisalist.wordpress.com/l-99-in-q/][Q-99]] in Q
+- [[https://wiki.haskell.org/99_questions][H-99]] in Haskell
+- [[http://www.ic.unicamp.br/~meidanis/courses/mc336/2006s2/funcional/L-99_Ninety-Nine_Lisp_Problems.html][L-99]] and [[https://www.informatimago.com/develop/lisp/l99/][L-99-Solutions]]
