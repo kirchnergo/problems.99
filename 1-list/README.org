@@ -8,8 +8,7 @@ In Prolog we represent the empty list by the atom [] and a non-empty list by a t
 *** TODO Prolog
 
 #+BEGIN_SRC prolog
-?- my_last(X,[a,b,c,d]).
-X = d
+my_last(X,[a,b,c,d]).
 #+END_SRC
 
 *** DONE J
@@ -76,12 +75,9 @@ first -2# `a`b`c`d
 
 ** 1.03 (*) Find the K'th element of a list. [2/3]
 
-    The first element in the list is number 1.
-
 *** TODO Prolog
 #+BEGIN_SRC prolog
-?- element_at(X,[a,b,c,d,e],3).
-X = c
+element_at(X,[a,b,c,d,e],3).
 #+END_SRC
 
 *** DONE J
@@ -107,8 +103,8 @@ s; (<:3) { s
     CLOSED: [2017-04-12 Mi 22:55]
 
 #+BEGIN_SRC Q
-kth:{x[y-1]}
-kth[`a`b`c`d`e;3]
+nth:{x[y-1]}
+nth[`a`b`c`d`e;3]
 #+END_SRC
 
 ** 1.04 (*) Find the number of elements of a list. [2/2]
@@ -176,7 +172,7 @@ s; |. s
 reverse `a`b`c`d`e`f`g
 #+END_SRC
 
-** 1.06 (*) Find out whether a list is a palindrome. [0/2]
+** 1.06 (*) Find out whether a list is a palindrome. [1/2]
     A palindrome can be read forward or backward; e.g. [x,a,m,a,x].
 
 *** TODO J
@@ -185,12 +181,14 @@ reverse `a`b`c`d`e`f`g
 
 #+END_SRC
 
-*** TODO Q
+*** DONE Q
+    CLOSED: [2017-04-18 Di 16:57]
 
 #+BEGIN_SRC Q
-
+pal:{x ~ reverse x}
+pal "xamax"
 #+END_SRC
-** 1.07 (**) Flatten a nested list structure.
+** 1.07 (**) Flatten a nested list structure. [1/2]
     Transform a list, possibly holding lists as elements into a 'flat' list by replacing each list with its elements (recursively).
 
     Example:
@@ -199,26 +197,77 @@ reverse `a`b`c`d`e`f`g
 
     Hint: Use the predefined predicates is_list/1 and append/3
 
-** 1.08 (**) Eliminate consecutive duplicates of list elements.
+*** TODO J
+
+#+BEGIN_SRC J
+
+#+END_SRC
+
+*** DONE Q
+    CLOSED: [2017-04-18 Di 16:57]
+
+#+BEGIN_SRC Q
+flatten:{$[(count x)~count raze x;:x;flatten raze x]};
+flatten ((1;2;3);(1;(2;(3;4)));(1;2))
+#+END_SRC
+** 1.08 (**) Eliminate consecutive duplicates of list elements. [1/2]
     If a list contains repeated elements they should be replaced with a single copy of the element. The order of the elements should not be changed.
 
     Example:
     ?- compress([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [a,b,c,a,d,e]
 
-** 1.09 (**) Pack consecutive duplicates of list elements into sublists.
+*** TODO J
+
+#+BEGIN_SRC J
+
+#+END_SRC
+
+*** DONE Q
+    CLOSED: [2017-04-18 Di 16:59]
+
+#+BEGIN_SRC Q
+compress:{x where differ x}
+compress 1 1 1 1 2 2 1 2 3 3 2 2 1
+#+END_SRC
+
+** 1.09 (**) Pack consecutive duplicates of list elements into sublists. [1/2]
     If a list contains repeated elements they should be placed in separate sublists.
 
     Example:
     ?- pack([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[a,a,a,a],[b],[c,c],[a,a],[d],[e,e,e,e]]
 
-** 1.10 (*) Run-length encoding of a list.
+*** TODO J
+#+BEGIN_SRC J
+
+#+END_SRC
+*** DONE Q
+    CLOSED: [2017-04-18 Di 17:00]
+#+BEGIN_SRC Q
+pack:{(where differ x) cut x};
+pack 1 1 1 1 2 2 1 2 3 3 2 2 1
+#+END_SRC
+** 1.10 (*) Run-length encoding of a list. [1/2]
     Use the result of problem 1.09 to implement the so-called run-length encoding data compression method. Consecutive duplicates of elements are encoded as terms [N,E] where N is the number of duplicates of the element E.
 
     Example:
     ?- encode([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[4,a],[1,b],[2,c],[2,a],[1,d],[4,e]]
+
+*** TODO J
+
+#+BEGIN_SRC J
+
+#+END_SRC
+
+*** DONE Q
+    CLOSED: [2017-04-18 Di 17:01]
+
+#+BEGIN_SRC Q
+encode:{c:where differ x; (deltas 1_c,count x) ,' x c};
+encode `a`a`a`a`b`c`c`a`a`d`e`e`e`e
+#+END_SRC
 
 ** 1.11 (*) Modified run-length encoding.
     Modify the result of problem 1.10 in such a way that if an element has no duplicates it is simply copied into the result list. Only elements with duplicates are transferred as [N,E] terms.
