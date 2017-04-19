@@ -174,3 +174,125 @@ slice[l;3;7]
 / * (remove-at '(a b c d) 2)
 /   (A C D)
 `a`b`c`d _ 1
+
+// P21: Insert an element at a given position into a list
+/ * (insert-at 'alfa '(a b c d) 2)
+/   (A ALFA B C D)
+insertAt:{f:(0;z-1)_y; raze (first f),x,(last f)}
+insertAt[`ALFA;`a`b`c`d`e`f`g`h;2]
+insertAt[10;`a`b`c`d`e`f`g`h;6]
+
+// P22: Create a list containing all integers within a given range
+/ If first argument is smaller than second, produce a list in decreasing order.
+/ * (range 4 9)
+/   (4 5 6 7 8 9)
+range:{$[x>y; reverse y+til x-y-1; x+til y-x-1]}
+range[20;35]
+range[35;20]
+
+// P23: Extract a given number of randomly selected elements from a list
+/ The selected items shall be returned in a list.
+/ * (rnd-select '(a b c d e f g h) 3)
+/   (E D A)
+/ Non-unique elemenst
+rndSelect:{y?x}
+rndSelect[til 20;30]
+rndSelect[`ekf`jef`col`faa`epl;8]
+/ Unique elemenst
+rndSelectU:{(neg y)?x}
+rndSelectU[til 20;10]
+rndSelectU[`ekf`jef`col`faa`epl;3]
+
+// P24: Lotto: Draw N different random numbers from the set 1..M
+/ The selected numbers shall be returned in a list.
+/ * (lotto-select 6 49)
+/   (23 1 17 33 21 37)
+lottoSelect:{(neg x)?1+til y}
+lottoSelect[5;20]
+lottoSelect[6;49]
+
+// P25: Generate a random permutation of the elements of a list
+/ * (rnd-permu '(a b c d e f))
+/   (B A D C E F)
+rndPermu:{(neg count x)?x}
+rndPermu[`a`b`c`d`e`f]
+rndPermu[til 20]
+
+// P26: Generate the combinations of K distinct objects chosen from the N elements of a list
+/ In how many ways can a committee of 3 be chosen from a group of 12 people? 
+/ We all know that there are C(12,3) = 220 possibilities (C(N,K) denotes the well-known binomial coefficients). 
+/ For pure mathematicians, this result may be great. But we want to really generate all the possibilities in a list.
+/ * (combination 3 '(a b c d e f))
+/   ((A B C) (A B D) (A B E) ... )
+comb0:{[n;k] if[n~k;:enlist til k]; $[1~k;:enlist each til n; :comb0[n-1;k],comb0[n-1;k-1],\:enlist n-1]}
+comb:{x@comb0[count x; y]}
+comb0[6;5]
+comb[`a`b`c`d`e`f;5]
+\ts do[1000; comb[`a`b`c`d`e`f;5]]
+comb2["kdb+";2]
+comb["kdb+";2]
+\ts do[10; comb[til 20;10]]
+
+// P27: Group the elements of a set into disjoint subsets
+/ In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons? 
+/ Write a function that generates all the possibilities and returns them in a list.
+/ * (group3 '(aldo beat carla david evi flip gary hugo ida))
+/   ( ( (ALDO BEAT) (CARLA DAVID EVI) (FLIP GARY HUGO IDA) )
+/   ... )
+/ Generalize the above predicate in a way that we can specify a list of group sizes and the predicate will return a list of groups.
+/ * (group '(aldo beat carla david evi flip gary hugo ida) '(2 2 5))
+/   ( ( (ALDO BEAT) (CARLA DAVID) (EVI FLIP GARY HUGO IDA) )
+/   ... )
+/ Note that we do not want permutations of the group members; 
+/ i.e. ((ALDO BEAT) …) is the same solution as ((BEAT ALDO) …). 
+/ However, we make a difference between ((ALDO BEAT) (CARLA DAVID) …) and ((CARLA DAVID) (ALDO BEAT) …).
+/ You may find more about this combinatorial problem in a good book on discrete mathematics under the term “multinomial coefficients“.
+
+/ using comb0 function to generate combinations of K distinct objects chosen from N elements of a list. 
+/ First the special case – 3 disjoint subgroups of 2, 3 and 4 elements:
+group3:{[list]
+  if[9<>count list;'"length";];
+  tmp:list except/:s2:list comb0[count list;2];
+  :raze (enlist each s2),/:'(enlist @/:'s3),''enlist@/:'tmp except/:'s3:tmp@\:comb0[count tmp[0];3]}
+group3 `a`b`c`d`e`f`g`h`i
+count group3 `a`b`c`d`e`f`g`h`i
+count distinct group3 `a`b`c`d`e`f`g`h`i
+/ Now the generalized version which is using recursion. 
+/ groups - generates all the groups
+/ subsets is a wrapper that adds one-time basic validation of parameters
+groups:{[list;lengths]
+  c:list comb0[count list;first lengths];
+  if[2=count lengths;
+    :flip ((),c;list except/:c);
+    ];
+  :raze (enlist each c),/:'.z.s ./:(enlist each list except/:c),\:enlist 1_lengths}
+subsets:{[list;lengths]
+  if[any not 0<lengths;'"type"];
+  if[(c:count list)<>sum lengths;'"length"];
+  if[all c=lengths;:list];
+  :groups[list;lengths]}
+subsets[`a`b`c`d`e`f`g`h`i;2 3 4]
+count subsets[`a`b`c`d`e`f`g`h`i;2 3 4]
+count distinct subsets[`a`b`c`d`e`f`g`h`i;2 3 4]
+subsets[`a`b`c`d`e`f`g`h`i;2 2 5]
+count subsets[`a`b`c`d`e`f`g`h`i;2 2 5]
+
+//  P28: Sorting a list of lists according to length of sublists
+/ We suppose that a list contains elements that are lists themselves. 
+/ The objective is to sort the elements of this list according to their length. 
+/ E.g. short lists first, longer lists later, or vice versa.
+/ * (lsort '((a b c) (d e) (f g h) (d e) (i j k l) (m n) (o)))
+/   ((O) (D E) (D E) (M N) (A B C) (F G H) (I J K L))
+/ Again, we suppose that a list contains elements that are lists themselves. 
+/ But this time the objective is to sort the elements of this list according to their length frequency; 
+/ i.e., in the default, where sorting is done ascendingly, lists with rare lengths are placed first, others with a more frequent length come later.
+/ * (lfsort '((a b c) (d e) (f g h) (d e) (i j k l) (m n) (o)))
+/   ((i j k l) (o) (a b c) (f g h) (d e) (d e) (m n))
+/ Note that in the above example, the first two lists in the result have length 4 and 1, both lengths appear just once. 
+/ The third and forth list have length 3 which appears twice (there are two list of this length). 
+/ And finally, the last three lists have length 2. This is the most frequent length.
+lsort:{x@iasc count each x}
+lsort (`a`b`c;`d`e;`f`g`h;`d`e;`i`j`k`l;`m`n;`o)
+lfsort:{x raze a iasc count each a:group count each x};
+lfsort (`a`b`c;`d`e;`f`g`h;`d`e;`i`j`k`l;`m`n;`o)
+\ts do[100000; lfsort (`a`b`c;`d`e;`f`g`h;`d`e;`i`j`k`l;`m`n;`o)]
