@@ -70,9 +70,9 @@ g2b 11100b
 / Table
 fill:{"b"$ (((y-count x)#0b),x)}
 fill[n2b 23;6]
-{b:fill["b"$ n2b x;6]; `n`b`g`g2b`b2n!(x;b;b2g b; g2b b2g b;b2n g2b b2g b)} each til 64
+{b:fill["b"$ n2b x;8]; `n`b`g`g2b`b2n!(x;b;b2g b; g2b b2g b;b2n g2b b2g b)} each til 128
 / As sets of indices
-1_ {b:fill["b"$ n2b x;6];  1+ where reverse b2g b} each til 256
+1_ {b:n2b x; 1+ where reverse b2g b} each til 256
 
 // P50 (***) Huffman code.
 / First of all, consult a good book on discrete mathematics or algorithms for a detailed description of Huffman codes!
