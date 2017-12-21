@@ -3,7 +3,7 @@
 A list is either empty or it is composed of a first element (head) and a tail, which is a list itself. 
 In Prolog we represent the empty list by the atom [] and a non-empty list by a term [H|T] where H denotes the head and T denotes the tail.
 
-** 1.01 (*) Find the last element of a list. [3/6]
+** 1.01 (*) Find the last element of a list. [4/8]
 
 *** TODO Prolog
 
@@ -42,6 +42,32 @@ last `a`b`c`d
     CLOSED: [2017-04-12 Mi 22:56]
 #+BEGIN_SRC mathematica
 Last@{1,2,3,4}
+#+END_SRC
+
+*** DONE F#
+    CLOSED: [2017-09-27 Wed 08:52]
+
+#+BEGIN_SRC fsharp
+let rec last = function
+  | [] -> None
+  | [x] -> Some x
+  | _ :: t -> last t
+#+END_SRC
+
+#+BEGIN_SRC fsharp
+last [ "a" ; "b" ; "c" ; "d" ]
+last [ 1; 2; 3; 4 ]
+last ([] : int list)
+#+END_SRC
+
+*** TODO Haskell
+
+#+BEGIN_SRC haskell
+
+#+END_SRC
+
+#+BEGIN_SRC haskell
+
 #+END_SRC
 
 ** 1.02 (*) Find the last but one element of a list. [2/2]
